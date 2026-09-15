@@ -16,8 +16,12 @@ public class PatrolState : IEnemyState
 
     public void Enter()
     {
+        _enemy.MeshRenderer.material.color = Color.blue;
+
         _currentWayPointIndex = 0;
         _currentWayPoint = _wayPoints[0];
+
+        _enemy.NavMeshAgent.isStopped = false;
 
         MoveToWayPoint(_currentWayPoint);
     }
@@ -29,6 +33,19 @@ public class PatrolState : IEnemyState
 
     public void Update()
     {
+
+        Collider[] colliders = Physics.OverlapSphere(_enemy.transform.position, 5f);
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.TryGetComponent<Player>(out Player player))
+            {
+                _enemy.EnemyStateMachine.ChangeState(new AlertState(_enemy, player));
+
+                return;
+            }
+        }
+
         Patrol();
     }
 

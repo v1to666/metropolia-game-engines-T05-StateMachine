@@ -3,24 +3,30 @@ using UnityEngine;
 public class ChaseState : IEnemyState
 {
     private Enemy _enemy;
+    private Player _player;
 
-    public ChaseState(Enemy enemy)
+    public ChaseState(Enemy enemy, Player player)
     {
         _enemy = enemy;
+        _player = player;
     }
 
     public void Enter()
     {
-        throw new System.NotImplementedException();
+        _enemy.MeshRenderer.material.color = Color.red;
+
+        _enemy.NavMeshAgent.isStopped = false;
+
+        _enemy.NavMeshAgent.speed = 5f;
     }
 
     public void Exit()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public void Update()
     {
-        throw new System.NotImplementedException();
+        _enemy.NavMeshAgent.destination = _player.transform.position;
     }
 }
