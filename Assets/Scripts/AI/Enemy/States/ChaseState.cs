@@ -5,6 +5,8 @@ public class ChaseState : IEnemyState
     private Enemy _enemy;
     private Player _player;
 
+    private float _timer = 0f;
+
     public ChaseState(Enemy enemy, Player player)
     {
         _enemy = enemy;
@@ -17,7 +19,7 @@ public class ChaseState : IEnemyState
 
         _enemy.NavMeshAgent.isStopped = false;
 
-        _enemy.NavMeshAgent.speed = 5f;
+        _enemy.NavMeshAgent.speed = 8f;
     }
 
     public void Exit()
@@ -28,5 +30,16 @@ public class ChaseState : IEnemyState
     public void Update()
     {
         _enemy.NavMeshAgent.destination = _player.transform.position;
+
+        float searchTime = 3f;
+
+        if (_timer < searchTime)
+        {
+            _timer += Time.deltaTime;
+
+            return;
+        }
+
+        _enemy.EnemyStateMachine.ChangeState(new AlertState(_enemy, _player));
     }
 }
