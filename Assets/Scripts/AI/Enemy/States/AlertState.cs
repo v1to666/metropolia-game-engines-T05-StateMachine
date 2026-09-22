@@ -15,44 +15,44 @@ public class AlertState : IEnemyState
 
     public void Enter()
     {
-        _enemy.MeshRenderer.material.color = Color.yellow;
+        _enemy.MeshRenderer.material.color = new Color32(255, 193, 7, 255);
 
         _enemy.NavMeshAgent.isStopped = true;
     }
 
     public void Exit()
     {
-
+        _enemy.NavMeshAgent.isStopped = false;
     }
 
     public void Update()
     {
-        _enemy.transform.LookAt(_player.transform.position);
-
         Search();
     }
 
     private void Search()
     {
-        float searchTime = 3f;
+        float searchTime = 5f;
+
+        _enemy.transform.Rotate(Vector3.up * 100f * Time.deltaTime);
+
+        RaycastHit[] raycastHits = Physics.RaycastAll(_enemy.transform.position, _enemy.transform.forward, 5f);
+
+        foreach (RaycastHit raycastHit in raycastHits)
+        {
+            if (raycastHit.collider.TryGetComponent<Player>(out Player player))
+            {
+                _enemy.EnemyStateMachine.ChangeState(new ChaseState(_enemy, player));
+
+                return;
+            }
+        }
 
         if (_timer < searchTime)
         {
             _timer += Time.deltaTime;
 
             return;
-        }
-
-        Collider[] colliders = Physics.OverlapSphere(_enemy.transform.position, 5f);
-
-        foreach (Collider collider in colliders)
-        {
-            if (collider.TryGetComponent<Player>(out Player player))
-            {
-                _enemy.EnemyStateMachine.ChangeState(new ChaseState(_enemy, player));
-
-                return;
-            }
         }
 
         _enemy.EnemyStateMachine.ChangeState(_enemy.PatrolState);

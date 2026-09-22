@@ -16,7 +16,7 @@ public class PatrolState : IEnemyState
 
     public void Enter()
     {
-        _enemy.MeshRenderer.material.color = Color.blue;
+        _enemy.MeshRenderer.material.color = new Color32(76, 175, 80, 255);
 
         _currentWayPointIndex = 0;
         _currentWayPoint = _wayPoints[0];
