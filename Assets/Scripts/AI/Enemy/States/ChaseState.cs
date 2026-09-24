@@ -41,6 +41,13 @@ public class ChaseState : IEnemyState
 
             foreach (Collider collider in colliders)
             {
+                if (collider.TryGetComponent<Weapon>(out Weapon weapon))
+                {
+                    _enemy.EnemyStateMachine.ChangeState(new EscapeState(_enemy, _player));
+
+                    return;
+                }
+
                 if (collider.TryGetComponent<Player>(out Player player))
                 {
                     _timer = 0f;

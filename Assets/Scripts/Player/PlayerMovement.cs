@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     private InputSystem_Actions _inputConfig;
     private InputAction _moveAction;
 
+    private Vector3 _targetDirection;
+
     private void Start()
     {
         _inputConfig = new InputSystem_Actions();
@@ -26,17 +28,28 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         Move();
+        Look();
     }
 
     private void Move()
     {
         Vector2 moveDirection = _moveAction.ReadValue<Vector2>();
 
-        Vector3 targetDirection = _mainCamera.transform.right * moveDirection.x + _mainCamera.transform.forward * moveDirection.y;
-        targetDirection.y = 0f;
+        _targetDirection = _mainCamera.transform.right * moveDirection.x + _mainCamera.transform.forward * moveDirection.y;
+        _targetDirection.y = 0f;
 
-        Vector3 targetVelocity = targetDirection.normalized * _speed * Time.deltaTime;
+        Vector3 targetVelocity = _targetDirection.normalized * _speed * Time.deltaTime;
 
         _characterController.Move(targetVelocity);
+    }
+
+    private void Look()
+    {
+        if (_targetDirection.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(_targetDirection);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5f * Time.deltaTime);
+        }
     }
 }
