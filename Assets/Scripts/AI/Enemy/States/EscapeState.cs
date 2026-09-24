@@ -38,7 +38,7 @@ public class EscapeState : IEnemyState
 
         foreach (Collider collider in colliders)
         {
-            if (collider.TryGetComponent<Player>(out Player player))
+            if (collider.TryGetComponent<Weapon>(out Weapon weapon))
             {
                 _escapeTimer = 5f;
 
