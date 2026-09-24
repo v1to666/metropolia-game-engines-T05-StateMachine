@@ -144673,7 +144673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32edf6b044893204fa35b10601c90477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeapon
-  _weapon: {fileID: 1131654373}
+  _weapon: {fileID: 1131654374}
 --- !u!1 &1740817251
 GameObject:
   m_ObjectHideFlags: 0
